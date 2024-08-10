@@ -1,7 +1,7 @@
 <?php
 /*
-Plugin Name: QR Code Counter
-Description: QR kodlarının okuma sayısını takip eden bir sistem.
+Plugin Name: qkt-counter
+Description: QR kodlarının okuma sayısını takip eden sistem.
 Version: 2.0.0
 Author: akltq00
 */
