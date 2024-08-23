@@ -97,12 +97,19 @@ function qr_counter_admin_page() {
 
     echo '<h1>QR Counter</h1>';
 
-    if ($can_manage && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['business_name']) && isset($_POST['qr_code_id'])) {
-        $business_name = sanitize_text_field($_POST['business_name']);
-        $qr_code_id = sanitize_text_field($_POST['qr_code_id']);
+    if ($can_manage && $_SERVER['REQUEST_METHOD'] == 'POST') {
+        if (isset($_POST['business_name']) && isset($_POST['qr_code_id'])) {
+            $business_name = sanitize_text_field($_POST['business_name']);
+            $qr_code_id = sanitize_text_field($_POST['qr_code_id']);
 
-        $wpdb->insert($table_name, array('business_name' => $business_name, 'qr_code_id' => $qr_code_id, 'count' => 0));
-        echo '<div class="updated"><p>Yeni işletme ve QR kodu eklendi!</p></div>';
+            $wpdb->insert($table_name, array('business_name' => $business_name, 'qr_code_id' => $qr_code_id, 'count' => 0));
+            echo '<div class="updated"><p>Yeni işletme ve QR kodu eklendi!</p></div>';
+        }
+
+        if (isset($_POST['reset_counts'])) {
+            $wpdb->query("UPDATE $table_name SET count = 0");
+            echo '<div class="updated"><p>Tüm okuma sayıları sıfırlandı!</p></div>';
+        }
     }
 
     if ($can_manage) {
@@ -111,6 +118,11 @@ function qr_counter_admin_page() {
         echo '<p>İşletme Adı: <input type="text" name="business_name" required></p>';
         echo '<p>QR Kod ID: <input type="text" name="qr_code_id" required></p>';
         echo '<p><input type="submit" value="Ekle" class="button button-primary"></p>';
+        echo '</form>';
+
+        echo '<form method="post" id="reset-form">';
+        echo '<h2>Tüm Okuma Sayılarını Sıfırla</h2>';
+        echo '<p><input type="submit" name="reset_counts" value="Tüm Verileri Sil" class="button button-secondary"></p>';
         echo '</form>';
     }
 
@@ -128,6 +140,19 @@ function qr_counter_admin_page() {
     } else {
         echo '<p>Veri bulunamadı</p>';
     }
+
+    ?>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            var form = document.getElementById('reset-form');
+            form.addEventListener('submit', function(event) {
+                if (!confirm('Tüm okuma sayıları sıfırlanacak. Emin misiniz?')) {
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
+    <?php
 }
 
 function qr_counter_settings_page() {
