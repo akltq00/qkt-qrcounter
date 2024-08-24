@@ -133,8 +133,10 @@ add_action('wp_ajax_nopriv_qr_counter_get_details_by_business', 'qr_counter_get_
 function qr_counter_admin_menu() {
     $view_roles = get_option('qr_counter_view_roles', ['administrator']);
     $manage_roles = get_option('qr_counter_manage_roles', ['administrator']);
+    $transcript_view_roles = get_option('qr_counter_transcript_view_roles', ['administrator']);
     
     $show_menu = false;
+    $show_transcript = false;
 
     foreach ($view_roles as $role) {
         if (current_user_can($role)) {
@@ -143,13 +145,23 @@ function qr_counter_admin_menu() {
         }
     }
 
+    foreach ($transcript_view_roles as $role) {
+        if (current_user_can($role)) {
+            $show_transcript = true;
+            break;
+        }
+    }
+
     if ($show_menu) {
         add_menu_page('QR Counter', 'QR Counter', 'read', 'qr-counter', 'qr_counter_admin_page', 'dashicons-chart-bar', 6);
         add_submenu_page('qr-counter', 'Ayarlar', 'Ayarlar', 'administrator', 'qr-counter-settings', 'qr_counter_settings_page');
-        add_submenu_page('qr-counter', 'Transkript', 'Transkript', 'administrator', 'qr-counter-transcript', 'qr_counter_transcript_page');
+        
+        if ($show_transcript) {
+            add_submenu_page('qr-counter', 'Transkript', 'Transkript', 'administrator', 'qr-counter-transcript', 'qr_counter_transcript_page');
+        }
     }
 }
-add_action('admin_menu', 'qr_counter_admin_menu');
+
 
 function qr_counter_admin_page() {
     global $wpdb;
@@ -347,12 +359,25 @@ function qr_counter_settings_page() {
                         ?>
                     </td>
                 </tr>
+                <tr valign="top">
+                    <th scope="row">Transkript Görüntüleme Rolleri</th>
+                    <td>
+                        <?php
+                        $transcript_view_roles = get_option('qr_counter_transcript_view_roles', ['administrator']);
+                        foreach ($editable_roles as $role => $details) {
+                            $checked = in_array($role, $transcript_view_roles) ? 'checked' : '';
+                            echo '<label><input type="checkbox" name="qr_counter_transcript_view_roles[]" value="' . esc_attr($role) . '" ' . $checked . '> ' . esc_html($details['name']) . '</label><br>';
+                        }
+                        ?>
+                    </td>
+                </tr>
             </table>
             <?php submit_button(); ?>
         </form>
     </div>
     <?php
 }
+
 
 function qr_counter_register_settings() {
     register_setting('qr_counter_settings', 'qr_counter_view_roles');
