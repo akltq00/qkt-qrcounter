@@ -202,7 +202,7 @@ function qr_counter_admin_page() {
         echo '<form method="post">';
         echo '<h2>Yeni İşletme ve QR Kod Ekle</h2>';
         echo '<p>İşletme Adı: <input type="text" name="business_name" required></p>';
-        echo '<p>QR Kod ID: <input type="text" name="qr_code_id" required></p>';
+        echo '<p>QR Kod ID: <input type="text" name="qr_code_id" required></p>'; // TODO: Keymaster dışında gözükmeyecek //
         echo '<p><input type="submit" value="Ekle" class="button button-primary"></p>';
         echo '</form>';
 
