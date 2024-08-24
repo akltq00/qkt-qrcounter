@@ -160,8 +160,9 @@ function qr_counter_admin_menu() {
             add_submenu_page('qr-counter', 'Transkript', 'Transkript', 'administrator', 'qr-counter-transcript', 'qr_counter_transcript_page');
         }
     }
+    
 }
-
+add_action('admin_menu', 'qr_counter_admin_menu');
 
 function qr_counter_admin_page() {
     global $wpdb;
