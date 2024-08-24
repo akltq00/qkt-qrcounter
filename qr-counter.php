@@ -27,7 +27,7 @@ function qr_counter_install() {
         scan_time DATETIME DEFAULT CURRENT_TIMESTAMP
     ) $charset_collate;";
 
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
     dbDelta($sql);
     dbDelta($details_sql);
 }
