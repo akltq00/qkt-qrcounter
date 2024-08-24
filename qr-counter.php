@@ -160,7 +160,6 @@ function qr_counter_admin_menu() {
             add_submenu_page('qr-counter', 'Transkript', 'Transkript', 'administrator', 'qr-counter-transcript', 'qr_counter_transcript_page');
         }
     }
-    
 }
 add_action('admin_menu', 'qr_counter_admin_menu');
 
@@ -297,7 +296,7 @@ function qr_counter_transcript_page() {
             document.getElementById('show-history').addEventListener('click', function() {
                 var businessName = document.getElementById('business-dropdown').value;
                 if (businessName) {
-                    fetch('<?php echo admin_url('admin-ajax.php'); ?>?action=qr_counter_get_details_by_business&business_name=' + encodeURIComponent(businessName)) // FIXME: Herhangi bir veri yoksa warn çıkmıyor, sadece sorgu döndürüyor. //
+                    fetch('<?php echo admin_url('admin-ajax.php'); ?>?action=qr_counter_get_details_by_business&business_name=' + encodeURIComponent(businessName)) 
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
@@ -311,7 +310,7 @@ function qr_counter_transcript_page() {
                                 });
                                 document.getElementById('history-details').innerHTML = detailsHtml;
                             } else {
-                                alert('AJAX isteği başarısız oldu: ' + data.data.message);
+                                document.getElementById('history-details').innerHTML = '<p>Veri bulunamadı: ' + data.data.message + '</p>';
                             }
                         })
                         .catch(error => {
@@ -379,9 +378,9 @@ function qr_counter_settings_page() {
     <?php
 }
 
-
 function qr_counter_register_settings() {
     register_setting('qr_counter_settings', 'qr_counter_view_roles');
     register_setting('qr_counter_settings', 'qr_counter_manage_roles');
+    register_setting('qr_counter_settings', 'qr_counter_transcript_view_roles');
 }
 add_action('admin_init', 'qr_counter_register_settings');
