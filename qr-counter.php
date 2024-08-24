@@ -130,6 +130,7 @@ function qr_counter_get_details_by_business() {
 add_action('wp_ajax_qr_counter_get_details_by_business', 'qr_counter_get_details_by_business');
 add_action('wp_ajax_nopriv_qr_counter_get_details_by_business', 'qr_counter_get_details_by_business');
 
+
 function qr_counter_admin_menu() {
     $view_roles = get_option('qr_counter_view_roles', ['administrator']);
     $manage_roles = get_option('qr_counter_manage_roles', ['administrator']);
@@ -157,10 +158,11 @@ function qr_counter_admin_menu() {
         add_submenu_page('qr-counter', 'Ayarlar', 'Ayarlar', 'administrator', 'qr-counter-settings', 'qr_counter_settings_page');
         
         if ($show_transcript) {
-            add_submenu_page('qr-counter', 'Transkript', 'Transkript', 'administrator', 'qr-counter-transcript', 'qr_counter_transcript_page');
+            add_submenu_page('qr-counter', 'Transkript', 'Transkript', 'read', 'qr-counter-transcript', 'qr_counter_transcript_page');
         }
     }
 }
+
 add_action('admin_menu', 'qr_counter_admin_menu');
 
 function qr_counter_admin_page() {
